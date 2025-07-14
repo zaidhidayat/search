@@ -78,31 +78,31 @@
       });
 
     // Event pencarian
-    document.getElementById('search').addEventListener('input', function() {
-      const query = this.value.trim().toLowerCase();
-      const resultDiv = document.getElementById('result');
-      if (!query) {
-        resultDiv.textContent = 'Hasil pencarian akan muncul di sini';
-        return;
+document.getElementById('search').addEventListener('input', function() {
+  const query = this.value.trim().toLowerCase();
+  const resultDiv = document.getElementById('result');
+  if (!query) {
+    resultDiv.textContent = 'Hasil pencarian akan muncul di sini';
+    return;
+  }
+  // Filter data hanya berdasarkan kolom desa
+  const filtered = csvData.filter(row =>
+    row["desa"] && row["desa"].toLowerCase().includes(query)
+  );
+  if (filtered.length === 0) {
+    resultDiv.textContent = 'Data tidak ditemukan.';
+  } else {
+    resultDiv.innerHTML = '';
+    filtered.forEach(item => {
+      let html = '<div style="margin-bottom:8px">';
+      for (const col in item) {
+        html += `<strong>${col}:</strong> ${item[col]}<br>`;
       }
-      // Filter data
-      const filtered = csvData.filter(row =>
-        Object.values(row).some(val => val.toLowerCase().includes(query))
-      );
-      if (filtered.length === 0) {
-        resultDiv.textContent = 'Data tidak ditemukan.';
-      } else {
-        resultDiv.innerHTML = '';
-        filtered.forEach(item => {
-          let html = '<div style="margin-bottom:8px">';
-          for (const col in item) {
-            html += `<strong>${col}:</strong> ${item[col]}<br>`;
-          }
-          html += '</div>';
-          resultDiv.innerHTML += html;
-        });
-      }
+      html += '</div>';
+      resultDiv.innerHTML += html;
     });
+  }
+});
   </script>
 </body>
 </html>
