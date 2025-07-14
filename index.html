@@ -1,108 +1,20 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pencarian Data CSV</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 16px;
-      background: #f5f5f5;
-    }
-    .container {
-      max-width: 500px;
-      margin: 0 auto;
-      padding: 16px;
-      background: #fff;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    }
-    .search-box {
-      width: 100%;
-      padding: 12px;
-      font-size: 1.1em;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      margin-bottom: 16px;
-      box-sizing: border-box;
-    }
-    .result-box {
-      background: #e9f8f6;
-      border: 1px solid #bfe3dc;
-      border-radius: 8px;
-      padding: 16px;
-      margin-top: 8px;
-      min-height: 40px;
-    }
-    @media (max-width: 600px) {
-      .container {
-        padding: 8px;
-        margin: 0 4px;
-      }
-      .result-box {
-        padding: 8px;
-      }
-    }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pencarian Data CSV</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <h2>Pencarian Data CSV</h2>
-    <input type="text" id="search" class="search-box" placeholder="Cari data...">
-    <div id="result" class="result-box">Hasil pencarian akan muncul di sini</div>
-  </div>
-  <script>
-    let csvData = [];
-
-    // Fungsi untuk memparsing CSV sederhana
-    function parseCSV(text) {
-      const rows = text.split('\n').filter(row => row.trim());
-      const headers = rows[0].split(',');
-      return rows.slice(1).map(row => {
-        const values = row.split(',');
-        let obj = {};
-        headers.forEach((header, i) => {
-          obj[header.trim()] = values[i] ? values[i].trim() : '';
-        });
-        return obj;
-      });
-    }
-
-    // Load data.csv pada awal
-    fetch('data.csv')
-      .then(response => response.text())
-      .then(text => {
-        csvData = parseCSV(text);
-      });
-
-    // Event pencarian
-document.getElementById('search').addEventListener('input', function() {
-  const query = this.value.trim().toLowerCase();
-  const resultDiv = document.getElementById('result');
-  if (!query) {
-    resultDiv.textContent = 'Hasil pencarian akan muncul di sini';
-    return;
-  }
-  // Filter data hanya berdasarkan kolom desa
-  const filtered = csvData.filter(row =>
-    row["desa"] && row["desa"].toLowerCase().includes(query)
-  );
-  if (filtered.length === 0) {
-    resultDiv.textContent = 'Data tidak ditemukan.';
-  } else {
-    resultDiv.innerHTML = '';
-    filtered.forEach(item => {
-      let html = '<div style="margin-bottom:8px">';
-      for (const col in item) {
-        html += `<strong>${col}:</strong> ${item[col]}<br>`;
-      }
-      html += '</div>';
-      resultDiv.innerHTML += html;
-    });
-  }
-});
-  </script>
+  <div class="container">
+    <h2>Pencarian Data CSV</h2>
+    <form id="searchForm">
+      <input type="text" id="searchInput" placeholder="Cari nama atau alamat...">
+      <button type="submit" id="searchButton">Cari</button>
+    </form>
+    <div id="result"></div>
+  </div>
+  <script src="script.js"></script>
 </body>
 </html>
